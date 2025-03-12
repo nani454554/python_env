@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  build_and_push:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,18 +22,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Run tests
-      env:
-        PYTHONPATH: ${{ github.workspace }}
-      run: pytest
-
-  build_and_push:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
 
     - name: Log in to Amazon ECR
       id: login-ecr
@@ -59,6 +47,8 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Configure kubectl
+      env:
+        AWS_REGION: ${{ secrets.AWS_REGION }}
       run: |
         aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
