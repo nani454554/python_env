@@ -28,7 +28,7 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
       with:
         registry: ${{ secrets.ECR_REGISTRY }}
-        region: ap-south-1
+        region: "ap-south-1"
 
     - name: Build, tag, and push image to Amazon ECR
       env:
